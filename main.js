@@ -16,6 +16,26 @@ let interest = interestRate / 12 / 100;
 
 let myChart;
 
+const checkValues = () => {
+  let loanAmountValue = loanAmountInput.value;
+  let interestRateValue = interestRateInput.value;
+  let loanTenureValue = loanTenureInput.value;
+
+  let regexNumber = /^[0-9]+$/;
+  if (!loanAmountValue.match(regexNumber)) {
+    loanAmountInput.value = "10000";
+  }
+
+  if (!loanTenureValue.match(regexNumber)) {
+    loanTenureInput.value = "12";
+  }
+
+  let regexDecimalNumber = /^(\d*\.)?\d+$/;
+  if (!interestRateValue.match(regexDecimalNumber)) {
+    interestRateInput.value = "7.5";
+  }
+};
+
 const displayChart = (totalInterestPayableValue) => {
   const ctx = document.getElementById("myChart").getContext("2d");
   myChart = new Chart(ctx, {
@@ -39,7 +59,16 @@ const updateChart = (totalInterestPayableValue) => {
   myChart.update();
 };
 
+const refreshInputValues = () => {
+  loanAmount = parseFloat(loanAmountInput.value);
+  interestRate = parseFloat(interestRateInput.value);
+  loanTenure = parseFloat(loanTenureInput.value);
+  interest = interestRate / 12 / 100;
+};
+
 const calculateEMI = () => {
+  checkValues();
+  refreshInputValues();
   let emi =
     loanAmount *
     interest *
@@ -65,15 +94,7 @@ const updateData = (emi) => {
   }
 };
 
-const refreshInputValues = () => {
-  loanAmount = parseFloat(loanAmountInput.value);
-  interestRate = parseFloat(interestRateInput.value);
-  loanTenure = parseFloat(loanTenureInput.value);
-  interest = interestRate / 12 / 100;
-};
-
 const init = () => {
-  refreshInputValues();
   let emi = calculateEMI();
   updateData(emi);
 };
